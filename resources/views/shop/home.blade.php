@@ -202,7 +202,7 @@
         <div class="section-header">
             <div>
                 <div class="section-title">Best Sellers</div>
-                <div class="section-sub">Most loved by our customers</div>
+                <div class="section-sub">Most love by our customers</div>
             </div>
             <a href="{{ route('shop') }}" class="view-all">View All &rarr;</a>
         </div>
