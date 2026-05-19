@@ -233,10 +233,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); height: 4px; curso
             <div class="preview-wrap" id="livePreview">
                 <div class="preview-header" id="previewHeader" style="background:#fff">
                     <div class="preview-logo" id="previewLogo" style="font-family:'Playfair Display',serif">
-                        @if(Setting::get('site_logo'))
-                            <img src="{{ asset('storage/'.Setting::get('site_logo')) }}" style="height:32px;object-fit:contain">
+                        @if(\App\Models\Setting::get('site_logo'))
+                            <img src="{{ asset('storage/'.\App\Models\Setting::get('site_logo')) }}" style="height:32px;object-fit:contain">
                         @else
-                            {{ Setting::get('site_name','My') }}<span id="previewLogoSpan" style="color:#c8a96e">Store</span>
+                            {{ \App\Models\Setting::get('site_name','My') }}<span id="previewLogoSpan" style="color:#c8a96e">Store</span>
                         @endif
                     </div>
                     <div class="preview-nav">
@@ -268,8 +268,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); height: 4px; curso
 
                 {{-- Logo --}}
                 <div class="color-label" style="margin-bottom:8px">Store Logo</div>
-                @if(Setting::get('site_logo'))
-                    <img src="{{ asset('storage/'.Setting::get('site_logo')) }}"
+                @if(\App\Models\Setting::get('site_logo'))
+                    <img src="{{ asset('storage/'.\App\Models\Setting::get('site_logo')) }}"
                          class="logo-preview-img" id="logoPreview">
                     <form action="{{ route('admin.theme.remove-logo') }}" method="POST" style="margin-bottom:10px">
                         @csrf <input type="hidden" name="type" value="logo">
@@ -301,8 +301,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); height: 4px; curso
 
                 {{-- Favicon --}}
                 <div class="color-label" style="margin-bottom:8px;margin-top:16px">Favicon</div>
-                @if(Setting::get('site_favicon'))
-                    <img src="{{ asset('storage/'.Setting::get('site_favicon')) }}"
+                @if(\App\Models\Setting::get('site_favicon'))
+                    <img src="{{ asset('storage/'.\App\Models\Setting::get('site_favicon')) }}"
                          style="width:32px;height:32px;object-fit:contain;margin-bottom:8px">
                     <form action="{{ route('admin.theme.remove-logo') }}" method="POST" style="margin-bottom:10px">
                         @csrf <input type="hidden" name="type" value="favicon">

@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', \App\Models\Setting::get('site_name', 'My Store'))</title>
-    <meta name="description" content="@yield('meta_description', \App\Models\Setting::get('meta_description', ''))">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+@php
+    use App\Services\ThemeService;
+    $siteLogo = \App\Models\Setting::get('site_logo');
+    $siteFav  = \App\Models\Setting::get('site_favicon');
+@endphp
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>@yield('title', \App\Models\Setting::get('site_name', 'My Store'))</title>
+
+@if($siteFav)
+<link rel="icon" type="image/png" href="{{ asset('storage/'.$siteFav) }}">
+@endif
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="{{ ThemeService::googleFontsUrl() }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{
-            --primary:#1a1a2e;
-            --accent:#c9a84c;
-            --accent-dark:#a8893a;
-            --text:#2d2d2d;
-            --text-light:#666;
-            --bg:#fafafa;
-            --white:#fff;
-            --border:#e8e8e8;
-            --radius:8px;
-            --shadow:0 2px 20px rgba(0,0,0,0.08);
-        }
+          :root{
+        {{ ThemeService::cssVars() }}
+        --white:#fff;
+        --text-light:#666;
+        --shadow:0 2px 20px rgba(0,0,0,0.08);
+    }
         body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);font-size:15px}
         a{text-decoration:none;color:inherit}
         img{max-width:100%;display:block}
@@ -120,9 +126,15 @@
 
 <header>
     <div class="header-inner">
-        <a href="{{ route('home') }}" class="logo">
-            {{ \App\Models\Setting::get('site_name', 'My') }}<span>Store</span>
-        </a>
+      <a href="{{ route('home') }}" class="logo">
+    @if($siteLogo)
+        <img src="{{ asset('storage/'.$siteLogo) }}"
+             alt="{{ \App\Models\Setting::get('site_name') }}"
+             style="height:44px;object-fit:contain;max-width:200px">
+    @else
+        {{ \App\Models\Setting::get('site_name', 'My') }}<span>Store</span>
+    @endif
+</a>
         <div class="search-bar">
             <form action="{{ route('shop.search') }}" method="GET">
                 <input type="text" name="q" placeholder="Search products..." value="{{ request('q') }}">
@@ -143,6 +155,8 @@
     <div class="nav-inner">
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
         <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">All Products</a>
+        <a href="{{ route('about') }}"   class="{{ request()->routeIs('about')   ? 'active' : '' }}">About</a>
+<a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
         @foreach(\App\Models\Category::active()->roots()->orderBy('sort_order')->take(6)->get() as $cat)
             <a href="{{ route('shop.category', $cat->slug) }}" class="{{ request()->is('shop/category/'.$cat->slug) ? 'active' : '' }}">{{ $cat->name }}</a>
         @endforeach

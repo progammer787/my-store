@@ -15,6 +15,9 @@ use App\Http\Controllers\Admin\OrderAdminController;
 use App\Http\Controllers\Admin\SettingAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\RoleAdminController;
+use App\Http\Controllers\Admin\ThemeAdminController;
+use App\Http\Controllers\Shop\AboutController;
+use App\Http\Controllers\Shop\ContactController;
 
 // PUBLIC
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -22,6 +25,9 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/category/{slug}', [ShopController::class, 'category'])->name('shop.category');
 Route::get('/shop/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/about',   [AboutController::class,  'index'])->name('about');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact',[ContactController::class, 'send'])->name('contact.send');
 
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
@@ -47,38 +53,54 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::middleware(['auth', 'admin'])->group(function () {
+
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+        // Products
         Route::middleware('permission:products')->group(function () {
             Route::resource('products', ProductAdminController::class);
             Route::post('products/{product}/toggle', [ProductAdminController::class, 'toggle'])->name('products.toggle');
         });
 
+       
+
+        // Categories
         Route::middleware('permission:categories')->group(function () {
             Route::resource('categories', CategoryAdminController::class);
         });
 
+        // Banners
         Route::middleware('permission:banners')->group(function () {
             Route::resource('banners', BannerAdminController::class);
             Route::post('banners/reorder', [BannerAdminController::class, 'reorder'])->name('banners.reorder');
         });
 
+        // Orders
         Route::middleware('permission:orders')->group(function () {
             Route::get('orders', [OrderAdminController::class, 'index'])->name('orders.index');
             Route::get('orders/{order}', [OrderAdminController::class, 'show'])->name('orders.show');
             Route::patch('orders/{order}/status', [OrderAdminController::class, 'updateStatus'])->name('orders.status');
         });
 
+        // Settings
         Route::middleware('permission:settings')->group(function () {
             Route::get('settings', [SettingAdminController::class, 'index'])->name('settings.index');
-            Route::post('settings', [SettingAdminController::class, 'save'])->name('settings.save');
+            Route::post('settings', [SettingAdminController::class, 'updateBatch'])->name('settings.save');
+
+            // Theme
+            Route::get('theme', [ThemeAdminController::class, 'index'])->name('theme.index');
+            Route::post('theme', [ThemeAdminController::class, 'save'])->name('theme.save');
+            Route::post('theme/preset', [ThemeAdminController::class, 'applyPreset'])->name('theme.preset');
+            Route::post('theme/remove-logo', [ThemeAdminController::class, 'removeLogo'])->name('theme.remove-logo');
         });
 
+        // Users
         Route::middleware('permission:users')->group(function () {
-    Route::resource('users', UserAdminController::class);
-    Route::post('users/{user}/toggle', [UserAdminController::class, 'toggleStatus'])->name('users.toggle');
-});
+            Route::resource('users', UserAdminController::class);
+            Route::post('users/{user}/toggle', [UserAdminController::class, 'toggleStatus'])->name('users.toggle');
+        });
 
+        // Roles
         Route::resource('roles', RoleAdminController::class);
     });
 });

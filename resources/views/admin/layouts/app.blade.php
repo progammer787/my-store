@@ -180,6 +180,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
         <div class="nav-section">System</div>
 
+        @if(auth()->user()->hasAccess('settings'))
+<div class="nav-item">
+    <a href="{{ route('admin.theme.index') }}" class="{{ request()->routeIs('admin.theme*') ? 'active' : '' }}">
+        <i class="fas fa-palette"></i> Theme
+    </a>
+</div>
+@endif
+
         @if(auth()->user()->hasAccess('users'))
         <div class="nav-item">
             <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users*') ? 'active' : '' }}">

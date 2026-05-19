@@ -31,6 +31,7 @@ class Setting extends Model
             ['value' => $value, 'type' => $type, 'group' => $group]
         );
         Cache::forget("setting_{$key}");
+         Cache::forget('theme_settings');
     }
 
     /**
