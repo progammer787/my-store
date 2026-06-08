@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\RoleAdminController;
 use App\Http\Controllers\Admin\ThemeAdminController;
 use App\Http\Controllers\Shop\AboutController;
 use App\Http\Controllers\Shop\ContactController;
+use App\Http\Controllers\Shop\ReviewController;
 
 // PUBLIC
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -28,6 +29,7 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product
 Route::get('/about',   [AboutController::class,  'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact',[ContactController::class, 'send'])->name('contact.send');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('review.store');
 
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
@@ -51,6 +53,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
     });
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
 
     Route::middleware(['auth', 'admin'])->group(function () {
 

@@ -115,6 +115,217 @@
             .footer-grid{grid-template-columns:1fr 1fr}
             nav a{padding:10px 12px;font-size:12px}
         }
+
+         
+/* ── Tablet (max 1100px) ── */
+@media (max-width: 1100px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .footer-grid  { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .hero-title   { font-size: 42px; }
+}
+ 
+/* ── Small Tablet (max 900px) ── */
+@media (max-width: 900px) {
+    /* Header */
+    .header-inner { flex-wrap: wrap; height: auto; padding: 12px 16px; gap: 10px; }
+    .logo { font-size: 22px; }
+    .search-bar { order: 3; max-width: 100%; width: 100%; flex: none; }
+    .header-actions { margin-left: auto; }
+ 
+    /* Nav */
+    .nav-inner { padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .nav-inner a { padding: 10px 12px; font-size: 13px; }
+    .nav-inner::-webkit-scrollbar { display: none; }
+ 
+    /* Products */
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+ 
+    /* Shop page layout */
+    .shop-wrap { grid-template-columns: 1fr; }
+    .shop-sidebar { display: none; }
+ 
+    /* Product detail */
+    .product-layout { grid-template-columns: 1fr; gap: 28px; }
+ 
+    /* Cart */
+    .cart-layout { grid-template-columns: 1fr; }
+    .cart-table th:nth-child(2),
+    .cart-table td:nth-child(2) { display: none; }
+ 
+    /* Checkout */
+    .checkout-layout { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+ 
+    /* Hero */
+    .hero-slide { height: 320px; }
+    .hero-title { font-size: 30px; }
+    .hero-subtitle { font-size: 15px; }
+    .hero-slide-content { padding: 0 24px; }
+    .hero-actions { flex-wrap: wrap; }
+ 
+    /* Promo banners */
+    .promo-row { grid-template-columns: 1fr; }
+    .promo-banner { height: 180px; }
+ 
+    /* Categories */
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+ 
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .footer-top { padding: 40px 16px 28px; }
+ 
+    /* About page */
+    .story-grid  { grid-template-columns: 1fr; }
+    .stats-grid  { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .values-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-grid   { grid-template-columns: repeat(2, 1fr); }
+ 
+    /* Contact page */
+    .contact-grid { grid-template-columns: 1fr; }
+    .form-row     { grid-template-columns: 1fr; }
+}
+ 
+/* ── Mobile (max 768px) ── */
+@media (max-width: 768px) {
+    /* General spacing */
+    .container { padding: 0 16px; }
+    .section   { padding: 40px 0; }
+ 
+    /* Header */
+    .header-inner { padding: 10px 16px; gap: 8px; }
+    .header-actions a { font-size: 16px; }
+ 
+    /* Products */
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .product-name { font-size: 13px; }
+    .price-current { font-size: 15px; }
+    .product-card-actions { gap: 6px; }
+    .product-card-actions .btn { padding: 8px 6px; font-size: 12px; }
+ 
+    /* Section headers */
+    .section-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .section-title  { font-size: 22px; }
+ 
+    /* Hero */
+    .hero-slide { height: 280px; }
+    .hero-title { font-size: 24px; line-height: 1.2; }
+    .hero-subtitle { font-size: 14px; display: none; }
+    .hero-badge { font-size: 10px; padding: 4px 10px; }
+    .hero-actions .btn:last-child { display: none; }
+ 
+    /* Categories */
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .category-img, .category-img-placeholder { width: 60px; height: 60px; }
+    .category-name { font-size: 13px; }
+ 
+    /* Cart table — show only essential columns */
+    .cart-table th:nth-child(4),
+    .cart-table td:nth-child(4) { display: none; }
+ 
+    /* Cart product info */
+    .cart-img  { width: 48px; height: 48px; }
+    .cart-name { font-size: 13px; }
+ 
+    /* Checkout */
+    .checkout-form-card { padding: 20px 16px; }
+    .order-summary-card { padding: 16px; }
+ 
+    /* Product detail */
+    .product-title { font-size: 22px; }
+    .big-price     { font-size: 24px; }
+    .gallery-thumbs { gap: 6px; }
+    .gallery-thumb  { width: 56px; height: 56px; }
+ 
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .footer-col:not(.footer-brand) { display: none; }
+    .footer-brand { text-align: center; }
+    .footer-social { justify-content: center; }
+ 
+    /* About page */
+    .about-hero h1  { font-size: 28px; }
+    .about-hero p   { font-size: 14px; }
+    .values-grid    { grid-template-columns: 1fr; }
+    .stats-grid     { grid-template-columns: repeat(2, 1fr); }
+    .stat-number    { font-size: 32px; }
+    .team-grid      { grid-template-columns: repeat(2, 1fr); }
+    .cta-section h2 { font-size: 26px; }
+ 
+    /* Contact page */
+    .contact-hero h1   { font-size: 26px; }
+    .contact-form-card { padding: 20px 16px; }
+    .wa-big-btn { flex-direction: column; text-align: center; gap: 8px; }
+ 
+    /* Pagination */
+    .pagination-wrap { gap: 4px; }
+    .page-link { width: 34px; height: 34px; font-size: 13px; }
+ 
+    /* WhatsApp float */
+    .whatsapp-float { width: 46px; height: 46px; font-size: 20px; bottom: 16px; right: 16px; }
+}
+ 
+/* ── Small Mobile (max 480px) ── */
+@media (max-width: 480px) {
+    /* Products — 2 column stays but smaller */
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .product-card-body { padding: 10px 10px 6px; }
+    .product-card-actions { padding: 0 10px 10px; }
+    .product-card-actions .btn { font-size: 11px; padding: 7px 4px; }
+ 
+    /* Hero */
+    .hero-slide { height: 220px; }
+    .hero-title { font-size: 20px; }
+    .hero-arrows { display: none; }
+ 
+    /* Nav — hide some categories */
+    .nav-inner a:nth-child(n+5) { display: none; }
+ 
+    /* Buttons */
+    .btn { padding: 10px 16px; font-size: 13px; }
+ 
+    /* Stats */
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .stat-number { font-size: 28px; }
+ 
+    /* Team */
+    .team-avatar { width: 90px; height: 90px; font-size: 30px; }
+ 
+    /* Form */
+    .form-grid  { grid-template-columns: 1fr; }
+    .form-row   { grid-template-columns: 1fr; }
+}
+ 
+/* ── Touch improvements ── */
+@media (hover: none) {
+    .product-card:hover { transform: none; }
+    .btn:hover { transform: none; }
+    .category-card:hover { transform: none; }
+}
+ 
+/* ── Mobile menu toggle (hamburger) ── */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+}
+.nav-mobile-open .nav-inner {
+    flex-direction: column;
+    align-items: flex-start;
+}
+@media (max-width: 600px) {
+    .mobile-menu-btn { display: flex; align-items: center; }
+    nav { display: none; }
+    nav.open { display: block; }
+    .nav-inner { flex-direction: column; padding: 8px 16px 16px; }
+    .nav-inner a { padding: 12px 4px; border-bottom: 1px solid var(--border); width: 100%; border-left: none; }
+    .nav-inner a:last-child { border-bottom: none; }
+    .nav-inner a.active { border-left: 3px solid var(--accent); padding-left: 10px; }
+}
     </style>
     @stack('styles')
 </head>
@@ -139,8 +350,14 @@
             <form action="{{ route('shop.search') }}" method="GET">
                 <input type="text" name="q" placeholder="Search products..." value="{{ request('q') }}">
                 <button type="submit"><i class="fas fa-search"></i></button>
+                
             </form>
+            
         </div>
+        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+        <a href="{{ route('about') }}"   class="{{ request()->routeIs('about')   ? 'active' : '' }}">About</a>
+        <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
+        
         <div class="header-actions">
             <a href="{{ route('shop') }}" title="Shop"><i class="fas fa-store"></i></a>
             <a href="{{ route('cart.index') }}" title="Cart" style="position:relative">
@@ -153,10 +370,9 @@
 
 <nav>
     <div class="nav-inner">
-        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+        
         <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">All Products</a>
-        <a href="{{ route('about') }}"   class="{{ request()->routeIs('about')   ? 'active' : '' }}">About</a>
-<a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
+
         @foreach(\App\Models\Category::active()->roots()->orderBy('sort_order')->take(6)->get() as $cat)
             <a href="{{ route('shop.category', $cat->slug) }}" class="{{ request()->is('shop/category/'.$cat->slug) ? 'active' : '' }}">{{ $cat->name }}</a>
         @endforeach
@@ -269,6 +485,49 @@ document.addEventListener('click', function(e) {
         });
     }
 });
+
+
+// ── Mobile Nav Toggle ──────────────────────────────
+(function() {
+    const nav = document.querySelector('nav');
+    const header = document.querySelector('header');
+ 
+    if (!nav || !header) return;
+ 
+    // Create hamburger button
+    const btn = document.createElement('button');
+    btn.className = 'mobile-menu-btn';
+    btn.innerHTML = '<i class="fas fa-bars"></i>';
+    btn.setAttribute('aria-label', 'Toggle menu');
+ 
+    // Insert after header-actions
+    const actions = header.querySelector('.header-actions');
+    if (actions) actions.after(btn);
+ 
+    btn.addEventListener('click', function() {
+        nav.classList.toggle('open');
+        const isOpen = nav.classList.contains('open');
+        btn.innerHTML = isOpen
+            ? '<i class="fas fa-times"></i>'
+            : '<i class="fas fa-bars"></i>';
+    });
+ 
+    // Close on nav link click
+    nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+    });
+ 
+    // Close on outside click
+    document.addEventListener('click', function(e) {
+        if (!nav.contains(e.target) && !btn.contains(e.target)) {
+            nav.classList.remove('open');
+            btn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    });
+})();
 </script>
 @stack('scripts')
 </body>

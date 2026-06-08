@@ -22,7 +22,11 @@ class BannerAdminController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validate($request);
+        $data = $this->validateBanner($request);
+        $data['is_active'] = $request->boolean('is_active');
+        $data['sort_order'] = $request->input('sort_order', 0);
+        $data['button_text'] = $request->input('button_text', '');
+        $data['button_link'] = $request->input('button_link', '');
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('banners', 'public');
         }
@@ -37,7 +41,11 @@ class BannerAdminController extends Controller
 
     public function update(Request $request, Banner $banner)
     {
-        $data = $this->validate($request);
+        $data = $this->validateBanner($request);
+        $data['is_active'] = $request->boolean('is_active');
+        $data['sort_order'] = $request->input('sort_order', 0);
+        $data['button_text'] = $request->input('button_text', '');
+        $data['button_link'] = $request->input('button_link', '');
         if ($request->hasFile('image')) {
             if ($banner->image) Storage::disk('public')->delete($banner->image);
             $data['image'] = $request->file('image')->store('banners', 'public');
@@ -61,7 +69,7 @@ class BannerAdminController extends Controller
         return response()->json(['success' => true]);
     }
 
-    private function validate(Request $request): array
+    private function validateBanner(Request $request): array
     {
         return $request->validate([
             'title'       => 'nullable|string|max:200',
@@ -73,8 +81,8 @@ class BannerAdminController extends Controller
             'position'    => 'required|in:hero,promo_left,promo_right,mid_banner',
             'text_color'  => 'nullable|string|max:20',
             'bg_color'    => 'nullable|string|max:20',
-            'sort_order'  => 'integer|min:0',
-            'is_active'   => 'boolean',
+            'sort_order'  => 'nullable|integer|min:0',
+            'is_active'   => 'sometimes|boolean',
         ]);
     }
 }

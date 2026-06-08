@@ -83,6 +83,7 @@ class ThemeService
             'fresh'   => ['label' => 'Fresh Green',     'primary' => '#14532d', 'accent' => '#22c55e', 'bg' => '#f0fdf4', 'text' => '#14532d', 'border' => '#bbf7d0'],
             'rose'    => ['label' => 'Rose Pink',       'primary' => '#881337', 'accent' => '#f43f5e', 'bg' => '#fff1f2', 'text' => '#1a1a1a', 'border' => '#fecdd3'],
             'dark'    => ['label' => 'Dark Mode',       'primary' => '#ffffff', 'accent' => '#a78bfa', 'bg' => '#0f0f0f', 'text' => '#e5e5e5', 'border' => '#2a2a2a'],
+            'ocean' => ['label'   => 'Ocean Teal',      'primary' => '#1F3A5A',  'accent'  => '#359B99','bg'=> '#FFFFFF','text'  => '#1F3A5A','border'  => '#D0EAEA',],
         ];
     }
 }
