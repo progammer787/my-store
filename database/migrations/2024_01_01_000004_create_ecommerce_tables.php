@@ -47,7 +47,7 @@ return new class extends Migration
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total', 10, 2)->default(0);
             $table->enum('status', ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
-            $table->enum('payment_method', ['whatsapp', 'cod'])->default('whatsapp');
+            $table->enum('payment_method', ['whatsapp', 'cod', 'demo'])->default('whatsapp');
             $table->text('notes')->nullable();
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();

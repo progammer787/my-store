@@ -24,7 +24,9 @@
         </div>
     </a>
     <div style="padding:0 16px 16px">
-    @if($product->stock > 0)
+    @if(!empty($product->attributes['sizes']) || !empty($product->attributes['colors']))
+        <a class="btn-add-cart" href="{{ route('product.show', $product->slug) }}">Choose Options</a>
+    @elseif($product->stock > 0)
         <form method="POST" action="{{ route('cart.add') }}">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">

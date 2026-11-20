@@ -19,12 +19,12 @@
 @endpush
 @section('content')
 <div class="container">
-    <h1 style="font-family:'Playfair Display',serif;font-size:30px;padding:30px 0 20px;color:var(--primary)">Checkout</h1>
+    <h1 class="page-title">Checkout</h1>
     <div class="checkout-layout">
         <div class="checkout-form">
             <div class="wa-notice">
                 <i class="fab fa-whatsapp" style="font-size:20px;flex-shrink:0"></i>
-                <div>After placing your order, you'll be redirected to <strong>WhatsApp</strong> to confirm with us. Your order will be saved automatically.</div>
+                <div><strong>Demo checkout:</strong> These sample products and prices are for presentation. Do not submit a real order.</div>
             </div>
             <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;color:var(--primary)">Your Information</h3>
             <form method="POST" action="{{ route('checkout.place') }}">
@@ -58,7 +58,7 @@
                     <textarea name="notes" rows="3" placeholder="Any special instructions...">{{ old('notes') }}</textarea>
                 </div>
                 <button type="submit" class="btn btn-accent" style="width:100%;justify-content:center;font-size:16px;padding:16px">
-                    <i class="fab fa-whatsapp"></i> Place Order via WhatsApp
+                    <i class="fas fa-bag-shopping"></i> Place Demo Order
                 </button>
             </form>
         </div>

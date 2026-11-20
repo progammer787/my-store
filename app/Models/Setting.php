@@ -15,7 +15,7 @@ class Setting extends Model
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        return Cache::remember("setting_{$key}", 3600, function () use ($key, $default) {
+        return Cache::remember("setting_v2_{$key}", 3600, function () use ($key, $default) {
             $setting = static::where('key', $key)->first();
             return $setting ? $setting->value : $default;
         });
@@ -30,7 +30,7 @@ class Setting extends Model
             ['key' => $key],
             ['value' => $value, 'type' => $type, 'group' => $group]
         );
-        Cache::forget("setting_{$key}");
+         Cache::forget("setting_v2_{$key}");
          Cache::forget('theme_settings');
     }
 

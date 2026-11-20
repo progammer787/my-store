@@ -68,7 +68,7 @@
 <section class="contact-hero">
     <div class="container">
         <h1>Get In Touch</h1>
-        <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        <p>This contact page is part of the storefront preview. Add the shop's real contact details before launch.</p>
     </div>
 </section>
 
@@ -126,13 +126,11 @@
                 </div>
                 @endif
 
-                {{-- Business Hours --}}
                 <div class="contact-card">
                     <div class="contact-card-icon"><i class="fas fa-clock"></i></div>
                     <div class="contact-card-body">
-                        <h4>Business Hours</h4>
-                        <p>Monday – Saturday: 9:00 AM – 8:00 PM</p>
-                        <p>Sunday: 11:00 AM – 5:00 PM</p>
+                        <h4>Contact setup</h4>
+                        <p>Phone, email, WhatsApp, and business hours can be added for the shop.</p>
                     </div>
                 </div>
 
@@ -164,8 +162,8 @@
 
             {{-- RIGHT — Contact Form --}}
             <div class="contact-form-card">
-                <h2>Send Us a Message</h2>
-                <p>Fill the form below and we'll get back to you shortly.</p>
+                <h2>Contact form preview</h2>
+                <p>Messages are not connected to a shop owner in this demo.</p>
 
                 @if(session('success'))
                 <div class="contact-success">
@@ -210,8 +208,8 @@
                             <textarea name="message" placeholder="Tell us how we can help you..." required>{{ old('message') }}</textarea>
                         </div>
                     </div>
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> Send Message
+                    <button type="submit" class="submit-btn" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">
+                        <i class="fas fa-paper-plane"></i> Demo form unavailable
                     </button>
                 </form>
             </div>

@@ -12,23 +12,33 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
+        $filters = $request->validate([
+            'q' => 'nullable|string|max:120',
+            'min_price' => 'nullable|numeric|min:0|max:99999999',
+            'max_price' => 'nullable|numeric|min:0|max:99999999',
+            'sort' => 'nullable|in:price_asc,price_desc,newest,relevance',
+        ]);
+
         $query = Product::active()->with('category');
 
-        if ($request->filled('q')) {
-            $query->where('name', 'like', '%' . $request->q . '%')
-                  ->orWhere('short_description', 'like', '%' . $request->q . '%');
+        if (!empty($filters['q'])) {
+            $term = addcslashes($filters['q'], '%_\\');
+            $query->where(function ($products) use ($term) {
+                $products->where('name', 'like', '%' . $term . '%')
+                    ->orWhere('short_description', 'like', '%' . $term . '%');
+            });
         }
 
-        if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->min_price);
+        if (isset($filters['min_price'])) {
+            $query->where('price', '>=', $filters['min_price']);
         }
 
-        if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->max_price);
+        if (isset($filters['max_price'])) {
+            $query->where('price', '<=', $filters['max_price']);
         }
 
-        if ($request->filled('sort')) {
-            match($request->sort) {
+        if (!empty($filters['sort'])) {
+            match($filters['sort']) {
                 'price_asc'  => $query->orderBy('price'),
                 'price_desc' => $query->orderByDesc('price'),
                 'newest'     => $query->latest(),
@@ -39,7 +49,9 @@ class ShopController extends Controller
         }
 
         $products   = $query->paginate(16)->withQueryString();
-        $categories = Category::active()->roots()->withCount('products')->get();
+        $categories = Category::active()->roots()
+            ->withCount(['products' => fn ($products) => $products->where('is_active', true)])
+            ->get();
 
         return view('shop.shop', compact('products', 'categories'));
     }
@@ -51,7 +63,9 @@ class ShopController extends Controller
         $allIds    = $childIds->prepend($category->id);
 
         $products  = Product::active()->whereIn('category_id', $allIds)->paginate(16)->withQueryString();
-        $categories= Category::active()->roots()->withCount('products')->get();
+        $categories= Category::active()->roots()
+            ->withCount(['products' => fn ($products) => $products->where('is_active', true)])
+            ->get();
 
         return view('shop.shop', compact('products', 'categories', 'category'));
     }

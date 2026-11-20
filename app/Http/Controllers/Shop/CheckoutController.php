@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\{Order, OrderItem};
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
@@ -46,45 +48,78 @@ public function __construct()
             return redirect()->route('cart.index')->with('error', 'Cart is empty.');
         }
 
-        // Save order
-        $order = Order::create([
-            'customer_name'    => $request->name,
-            'customer_phone'   => $request->phone,
-            'customer_email'   => $request->email,
-            'customer_address' => $request->address,
-            'city'             => $request->city,
-            'subtotal'         => $subtotal,
-            'total'            => $subtotal,
-            'notes'            => $request->notes,
-            'payment_method'   => 'whatsapp',
-            'status'           => 'pending',
-        ]);
+        // Re-read products at checkout so stale session prices and hidden or
+        // unavailable products can never determine the order total.
+        $isDemoOrder = false;
+        $order = DB::transaction(function () use ($request, &$items, &$isDemoOrder) {
+            $products = \App\Models\Product::active()
+                ->whereIn('id', collect($items)->pluck('product_id'))
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
 
-        foreach ($items as $item) {
-            OrderItem::create([
-                'order_id'      => $order->id,
-                'product_id'    => $item['product_id'],
-                'product_name'  => $item['name'],
-                'product_image' => $item['thumbnail'],
-                'price'         => $item['price'],
-                'quantity'      => $item['quantity'],
-                'total'         => $item['price'] * $item['quantity'],
-                'attributes'    => $item['attributes'] ?? null,
+            $isDemoOrder = $products->isNotEmpty()
+                && $products->every(fn ($product) => (bool) data_get($product->attributes, 'demo_only', false));
+
+            $subtotal = 0;
+            foreach ($items as $key => $item) {
+                $product = $products->get($item['product_id']);
+                if (!$product || $product->stock < $item['quantity']) {
+                    throw ValidationException::withMessages([
+                        'cart' => 'One or more items are unavailable or no longer have enough stock. Please update your cart.',
+                    ]);
+                }
+                $subtotal += (float) $product->current_price * (int) $item['quantity'];
+                $items[$key]['name'] = $product->name;
+                $items[$key]['price'] = (float) $product->current_price;
+                $items[$key]['thumbnail'] = $product->thumbnail_url;
+            }
+
+            $order = Order::create([
+                'customer_name'    => $request->name,
+                'customer_phone'   => $request->phone,
+                'customer_email'   => $request->email,
+                'customer_address' => $request->address,
+                'city'             => $request->city,
+                'subtotal'         => $subtotal,
+                'total'            => $subtotal,
+                'notes'            => $isDemoOrder ? trim('[DEMO ONLY] ' . ($request->notes ?? '')) : $request->notes,
+                'payment_method'   => $isDemoOrder ? 'demo' : 'whatsapp',
+                'status'           => 'pending',
             ]);
-        }
 
-        // Build WhatsApp URL
-        $waUrl = $this->cart->buildWhatsAppUrl($request->only(['name', 'phone', 'address', 'notes']));
+            foreach ($items as $item) {
+                $product = $products->get($item['product_id']);
+                OrderItem::create([
+                    'order_id'      => $order->id,
+                    'product_id'    => $item['product_id'],
+                    'product_name'  => $product->name,
+                    'product_image' => $product->thumbnail_url,
+                    'price'         => $product->current_price,
+                    'quantity'      => $item['quantity'],
+                    'total'         => $product->current_price * $item['quantity'],
+                    'attributes'    => $item['attributes'] ?? null,
+                ]);
+                if (!$isDemoOrder) {
+                    $product->decrement('stock', (int) $item['quantity']);
+                }
+            }
+
+            return $order;
+        });
+
+        session(['last_checkout_order' => $order->getKey()]);
 
         // Clear cart
         $this->cart->clear();
 
-        // Redirect to WhatsApp (open in new tab via JS on success page)
-        return redirect()->route('checkout.success', $order)->with('wa_url', $waUrl);
+        return redirect()->route('checkout.success', $order)->with('is_demo_order', $isDemoOrder);
     }
 
     public function success(Order $order)
     {
+        abort_unless((int) session('last_checkout_order') === (int) $order->getKey(), 404);
+
         return view('shop.checkout-success', compact('order'));
     }
 }

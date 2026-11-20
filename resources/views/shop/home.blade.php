@@ -50,6 +50,15 @@
 .mid-banner-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:linear-gradient(90deg,rgba(0,0,0,.6),transparent)}
 .mid-banner-text h3{font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin-bottom:6px}
 .mid-banner-text p{color:rgba(255,255,255,.8);font-size:14px}
+.boutique-hero{display:grid;grid-template-columns:1fr 1fr;min-height:430px;background:#f1e8e2;overflow:hidden}
+.boutique-hero-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:64px max(7vw,40px);position:relative;z-index:1}
+.boutique-hero-kicker{color:#794657;font-size:11px;font-weight:750;letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px}
+.boutique-hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(38px,5vw,66px);line-height:1.06;letter-spacing:-.035em;color:#321b2a;max-width:560px;margin:0 0 18px}
+.boutique-hero p{color:#65545d;max-width:440px;font-size:15px;line-height:1.8;margin-bottom:26px}
+.boutique-hero-visual{position:relative;overflow:hidden;min-height:430px;background:#d2b19e}
+.boutique-hero-visual img{position:absolute;width:100%;height:100%;object-fit:cover;object-position:right center}
+.boutique-hero-demo{position:absolute;right:16px;bottom:16px;background:rgba(255,255,255,.92);padding:9px 13px;color:#563342;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.demo-notice{background:#f8f2ed;color:#674b55;text-align:center;font-size:11px;letter-spacing:.04em;padding:11px 18px;border-bottom:1px solid #eadfda}
 
 @media(max-width:768px){
     .slide{height:320px}
@@ -58,6 +67,9 @@
     .mid-banner{height:140px}
     .mid-banner-content{padding:0 24px}
     .mid-banner-text h3{font-size:20px}
+    .boutique-hero{grid-template-columns:1fr;min-height:0}
+    .boutique-hero-copy{padding:48px 25px 36px}
+    .boutique-hero-visual{min-height:300px}
 }
 </style>
 @endpush
@@ -98,6 +110,20 @@
         </div>
     @endif
 </section>
+@else
+<section class="boutique-hero">
+    <div class="boutique-hero-copy">
+        <span class="boutique-hero-kicker">Karachi boutique storefront demo</span>
+        <h1>Everyday elegance, made for you.</h1>
+        <p>A sample online boutique with clear sizes, colours, prices and easy ordering—ready to be tailored to a real shop.</p>
+        <a href="{{ route('shop') }}" class="btn btn-accent">Explore the collection <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="boutique-hero-visual">
+        <img src="{{ asset('images/boutique-demo-editorial.jpg') }}" alt="Illustrated fashion and boutique shopping scene">
+        <span class="boutique-hero-demo">Illustrative demo art</span>
+    </div>
+</section>
+<div class="demo-notice">DEMO STORE · Sample styles, prices and availability are for presentation only.</div>
 @endif
 
 <div class="container">
@@ -123,8 +149,8 @@
     <section class="section">
         <div class="section-header">
             <div>
-                <div class="section-title">Shop by Category</div>
-                <div class="section-sub">Find exactly what you're looking for</div>
+                <div class="section-title">Explore the collection</div>
+                <div class="section-sub">Browse the demo by style and occasion</div>
             </div>
             <a href="{{ route('shop') }}" class="view-all">View All &rarr;</a>
         </div>
@@ -132,7 +158,11 @@
             @foreach($homeCategories as $cat)
             <a href="{{ route('shop.category', $cat->slug) }}" class="cat-card">
                 <div class="cat-img-wrap">
-                    <img src="{{ $cat->image_url }}" alt="{{ $cat->name }}">
+                    @if($cat->image)
+                        <img src="{{ $cat->image_url }}" alt="{{ $cat->name }}">
+                    @else
+                        <span class="cat-icon-placeholder">@include('shop.partials.category-icon', ['category' => $cat])</span>
+                    @endif
                 </div>
                 <div class="cat-name">{{ $cat->name }}</div>
             </a>
@@ -146,8 +176,8 @@
     <section class="section" style="padding-top:0">
         <div class="section-header">
             <div>
-                <div class="section-title">Featured Products</div>
-                <div class="section-sub">Handpicked just for you</div>
+                <div class="section-title">Featured looks</div>
+                <div class="section-sub">A few sample styles to show your collection online</div>
             </div>
             <a href="{{ route('shop') }}" class="view-all">View All &rarr;</a>
         </div>
@@ -183,8 +213,8 @@
     <section class="section" style="padding-top:0">
         <div class="section-header">
             <div>
-                <div class="section-title">New Arrivals</div>
-                <div class="section-sub">Fresh styles, just landed</div>
+                <div class="section-title">New arrivals</div>
+                <div class="section-sub">Fresh sample looks added to the demo</div>
             </div>
             <a href="{{ route('shop') }}" class="view-all">View All &rarr;</a>
         </div>
@@ -201,8 +231,8 @@
     <section class="section" style="padding-top:0">
         <div class="section-header">
             <div>
-                <div class="section-title">Best Sellers</div>
-                <div class="section-sub">Most love by our customers</div>
+                <div class="section-title">Popular picks</div>
+                <div class="section-sub">Sample products can be replaced with a shop's real best sellers</div>
             </div>
             <a href="{{ route('shop') }}" class="view-all">View All &rarr;</a>
         </div>

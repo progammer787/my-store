@@ -26,7 +26,7 @@
 
 @section('content')
 <div class="container">
-    <h1 style="font-family:'Playfair Display',serif;font-size:30px;padding:30px 0 0;color:var(--primary)">Your Cart</h1>
+    <h1 class="page-title">Your Cart</h1>
 
     @if(count($items))
     <div class="cart-layout">
@@ -47,7 +47,16 @@
                         <td>
                             <div class="cart-product">
                                 <img src="{{ $item['thumbnail'] }}" alt="{{ $item['name'] }}">
-                                <div class="cart-product-name">{{ $item['name'] }}</div>
+                                <div>
+                                    <div class="cart-product-name">{{ $item['name'] }}</div>
+                                    @if(!empty($item['attributes']))
+                                        <div style="font-size:11px;color:var(--text-light);margin-top:3px">
+                                            @foreach($item['attributes'] as $key => $value)
+                                                {{ ucfirst($key) }}: {{ $value }}@if(!$loop->last) · @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </td>
                         <td>{{ \App\Models\Setting::get('currency_symbol','Rs.') }} {{ number_format($item['price'], 0) }}</td>
@@ -79,7 +88,7 @@
         <div class="cart-summary">
             <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;color:var(--primary)">Order Summary</h3>
             <div class="summary-row"><span>Subtotal</span><span>{{ \App\Models\Setting::get('currency_symbol','Rs.') }} {{ number_format($subtotal, 0) }}</span></div>
-            <div class="summary-row"><span>Shipping</span><span style="color:#2e7d32">Free</span></div>
+            <div class="summary-row"><span>Shipping</span><span>Confirmed with boutique</span></div>
             <div class="summary-total"><span>Total</span><span>{{ \App\Models\Setting::get('currency_symbol','Rs.') }} {{ number_format($subtotal, 0) }}</span></div>
             <a href="{{ route('checkout.index') }}" class="btn btn-accent" style="width:100%;justify-content:center;margin-top:20px;display:flex">
                 <i class="fab fa-whatsapp"></i> Proceed to Checkout

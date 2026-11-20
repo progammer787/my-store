@@ -23,6 +23,9 @@
 .in-stock{background:#e8f5e9;color:#2e7d32}
 .out-stock{background:#fce4ec;color:#c62828}
 .qty-row{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.variant-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 22px}
+.variant-field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.variant-field select{width:100%;padding:12px;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:4px}
 .qty-label{font-size:14px;font-weight:600;color:var(--primary)}
 .qty-input{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:8px;overflow:hidden}
 .qty-input button{width:36px;height:40px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text)}
@@ -102,6 +105,28 @@
             <form id="cartForm">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
+                @if(!empty($product->attributes['sizes']) || !empty($product->attributes['colors']))
+                <div class="variant-row">
+                    @if(!empty($product->attributes['sizes']))
+                    <div class="variant-field">
+                        <label for="product-size">Size</label>
+                        <select id="product-size" required>
+                            <option value="">Choose size</option>
+                            @foreach($product->attributes['sizes'] as $size)<option value="{{ $size }}">{{ $size }}</option>@endforeach
+                        </select>
+                    </div>
+                    @endif
+                    @if(!empty($product->attributes['colors']))
+                    <div class="variant-field">
+                        <label for="product-color">Colour</label>
+                        <select id="product-color" required>
+                            <option value="">Choose colour</option>
+                            @foreach($product->attributes['colors'] as $color)<option value="{{ $color }}">{{ $color }}</option>@endforeach
+                        </select>
+                    </div>
+                    @endif
+                </div>
+                @endif
                 <div class="qty-row">
                     <span class="qty-label">Quantity:</span>
                     <div class="qty-input">
@@ -170,10 +195,17 @@ function changeQty(d) {
 }
 function addToCart() {
     const qty = document.getElementById('qty').value;
+    const attributes = {};
+    const size = document.getElementById('product-size');
+    const color = document.getElementById('product-color');
+    if (size && !size.value) { size.focus(); return; }
+    if (color && !color.value) { color.focus(); return; }
+    if (size) attributes.size = size.value;
+    if (color) attributes.color = color.value;
     fetch('{{ route("cart.add") }}', {
         method: 'POST',
         headers: {'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}','Accept':'application/json'},
-        body: JSON.stringify({product_id: {{ $product->id }}, quantity: parseInt(qty)})
+        body: JSON.stringify({product_id: {{ $product->id }}, quantity: parseInt(qty), attributes})
     }).then(r => r.json()).then(d => {
         document.getElementById('cart-count').textContent = d.count;
         alert('Added to cart!');

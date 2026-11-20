@@ -62,8 +62,12 @@ class Category extends Model
 
     public function getImageUrlAttribute(): string
 {
+    if ($this->image && \Illuminate\Support\Str::startsWith($this->image, 'images/')) {
+        return asset($this->image);
+    }
+
     return $this->image
         ? asset('storage/' . $this->image)
-        : 'https://placehold.co/200x200/1a1a2e/c9a84c?text=' . urlencode($this->name);
+        : asset('images/product-placeholder.svg');
 }
 }

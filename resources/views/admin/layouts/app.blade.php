@@ -117,6 +117,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .search-wrap input{background:rgba(255,255,255,.05);border:1px solid var(--card-border);border-radius:8px;padding:9px 14px 9px 36px;color:var(--text);font-size:13px;outline:none;width:240px;transition:.2s;font-family:inherit}
 .search-wrap input:focus{border-color:var(--accent)}
 .search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px}
+.admin-pagination{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 0 0;border-top:1px solid var(--card-border);margin-top:16px}
+.admin-pagination nav{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.admin-pagination a,.admin-pagination span{display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;padding:8px 11px;border:1px solid var(--card-border);border-radius:7px;color:var(--text);font-size:13px;line-height:1.2;text-decoration:none}
+.admin-pagination a:hover{border-color:var(--accent);color:var(--accent)}
+.admin-pagination .page-current{background:var(--accent);border-color:var(--accent);color:#111;font-weight:700}
+.admin-pagination .page-disabled{color:var(--text-muted)}
+.admin-pagination-summary{font-size:12px;color:var(--text-muted)}
+@media(max-width:600px){.admin-pagination{align-items:flex-start;flex-direction:column}.admin-pagination nav{width:100%}}
 
 @media(max-width:900px){
     .sidebar{transform:translateX(-100%)}

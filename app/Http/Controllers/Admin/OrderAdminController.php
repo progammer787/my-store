@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderAdminController extends Controller
 {
@@ -42,10 +43,27 @@ class OrderAdminController extends Controller
             'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled',
         ]);
 
-        $order->update([
-            'status'       => $request->status,
-            'confirmed_at' => $request->status === 'confirmed' ? now() : $order->confirmed_at,
-        ]);
+        DB::transaction(function () use ($order, $request) {
+            $order = Order::whereKey($order->getKey())->lockForUpdate()->firstOrFail();
+
+            if ($order->status === 'cancelled' && $request->status !== 'cancelled') {
+                abort(422, 'Cancelled orders cannot be reopened.');
+            }
+
+            if ($request->status === 'cancelled' && $order->status !== 'cancelled') {
+                foreach ($order->items as $item) {
+                    if ($item->product_id) {
+                        \App\Models\Product::whereKey($item->product_id)
+                            ->increment('stock', $item->quantity);
+                    }
+                }
+            }
+
+            $order->update([
+                'status'       => $request->status,
+                'confirmed_at' => $request->status === 'confirmed' ? now() : $order->confirmed_at,
+            ]);
+        });
 
         return back()->with('success', 'Order status updated.');
     }

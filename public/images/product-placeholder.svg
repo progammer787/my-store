@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="title">
+  <title id="title">Product image coming soon</title>
+  <rect width="800" height="1000" fill="#f4f4f2"/>
+  <g fill="none" stroke="#c8c8c4" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M300 360h200l56 390H244l56-390Z"/>
+    <path d="M328 365c0-74 32-124 72-124s72 50 72 124"/>
+  </g>
+  <text x="400" y="830" text-anchor="middle" fill="#8a8a84" font-family="Arial,sans-serif" font-size="25" letter-spacing="5">PRODUCT IMAGE</text>
+</svg>

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Services\CartService;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -27,16 +28,36 @@ public function __construct()
 
   public function add(Request $request)
 {
-    $request->validate([
+    $data = $request->validate([
         'product_id' => 'required|exists:products,id',
         'quantity'   => 'integer|min:1|max:99',
+        'attributes' => 'sometimes|array',
+        'attributes.size' => 'sometimes|string|max:20',
+        'attributes.color' => 'sometimes|string|max:40',
     ]);
 
+    $product = Product::active()->findOrFail($data['product_id']);
+    $options = $product->attributes ?? [];
+    $chosen = $data['attributes'] ?? [];
+    foreach (['size' => 'sizes', 'color' => 'colors'] as $field => $optionKey) {
+        $available = $options[$optionKey] ?? [];
+        if ($available && empty($chosen[$field])) {
+            return response()->json(['message' => "Please select a {$field}.", 'errors' => [$field => ['Please select a ' . $field . '.']]], 422);
+        }
+        if (!empty($chosen[$field]) && !in_array($chosen[$field], $available, true)) {
+            return response()->json(['message' => "The selected {$field} is unavailable."], 422);
+        }
+    }
+
     $this->cart->add(
-        $request->product_id,
-        $request->quantity ?? 1,
-        $request->input('attributes', [])
+        $data['product_id'],
+        $data['quantity'] ?? 1,
+        $chosen
     );
+
+    if ($request->expectsJson()) {
+        return response()->json(['count' => $this->cart->count(), 'message' => 'Added to cart.']);
+    }
 
     return back()->with('success', 'Item added to cart!');
 }

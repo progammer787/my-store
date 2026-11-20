@@ -28,12 +28,12 @@ Route::get('/shop/search', [ShopController::class, 'search'])->name('shop.search
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/about',   [AboutController::class,  'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact',[ContactController::class, 'send'])->name('contact.send');
-Route::post('/reviews', [ReviewController::class, 'store'])->name('review.store');
+Route::post('/contact',[ContactController::class, 'send'])->middleware('throttle:5,1')->name('contact.send');
+Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttle:3,1')->name('review.store');
 
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
-    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/add', [CartController::class, 'add'])->middleware('throttle:30,1')->name('add');
     Route::patch('/update', [CartController::class, 'update'])->name('update');
     Route::delete('/remove', [CartController::class, 'remove'])->name('remove');
     Route::get('/count', [CartController::class, 'count'])->name('count');
@@ -41,7 +41,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
 
 Route::prefix('checkout')->name('checkout.')->group(function () {
     Route::get('/', [CheckoutController::class, 'index'])->name('index');
-    Route::post('/place', [CheckoutController::class, 'place'])->name('place');
+    Route::post('/place', [CheckoutController::class, 'place'])->middleware('throttle:5,1')->name('place');
     Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
 });
 
@@ -50,7 +50,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
     });
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     

@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
   ->withMiddleware(function (Middleware $middleware) {
     $middleware->redirectGuestsTo('/admin/login'); // ADD THIS
+    $middleware->trustProxies(at: '*');
     $middleware->alias([
         'admin'      => \App\Http\Middleware\AdminMiddleware::class,
         'permission' => \App\Http\Middleware\PermissionMiddleware::class,

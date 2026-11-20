@@ -75,9 +75,13 @@ public function getReviewCountAttribute(): int
 
   public function getThumbnailUrlAttribute(): string
 {
+    if ($this->thumbnail && Str::startsWith($this->thumbnail, 'images/')) {
+        return asset($this->thumbnail);
+    }
+
     return $this->thumbnail
         ? asset('storage/' . $this->thumbnail)
-        : 'https://placehold.co/400x400/1a1a2e/c9a84c?text=No+Image';
+        : asset('images/product-placeholder.svg');
 }
 
     // Auto slug + SKU
